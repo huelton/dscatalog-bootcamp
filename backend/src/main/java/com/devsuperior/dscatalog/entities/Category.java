@@ -30,6 +30,11 @@ public class Category implements Serializable{
 		this.id = id;
 		this.name = name;
 	}
+	
+//	public Category(CategoryDTO dto) {
+//		this.id = dto.getId();
+//		this.name = dto.getName();
+//	}
 
 	public Long getId() {
 		return id;
@@ -70,13 +75,6 @@ public class Category implements Serializable{
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}
-
-	public Category toEntity(CategoryDTO dto) {
-		Category cat = new Category();
-		cat.setName(dto.getName());
-		
-		return cat;
 	}
 
 }
