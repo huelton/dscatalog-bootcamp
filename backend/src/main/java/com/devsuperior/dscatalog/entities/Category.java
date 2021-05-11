@@ -8,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.devsuperior.dscatalog.dto.CategoryDTO;
+
 @Entity
 @Table(name="tb_category")
 public class Category implements Serializable{
@@ -68,6 +70,13 @@ public class Category implements Serializable{
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
-	}	
+	}
+
+	public Category toEntity(CategoryDTO dto) {
+		Category cat = new Category();
+		cat.setName(dto.getName());
+		
+		return cat;
+	}
 
 }
