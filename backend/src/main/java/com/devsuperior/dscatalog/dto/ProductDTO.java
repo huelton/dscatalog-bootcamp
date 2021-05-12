@@ -20,7 +20,7 @@ public class ProductDTO implements Serializable{
 	private String imgUrl;
 	private Instant date;
 
-	List<CategoryDTO> categories = new ArrayList();
+	List<CategoryDTO> categories = new ArrayList<CategoryDTO>();
 
 	public ProductDTO() {
 
