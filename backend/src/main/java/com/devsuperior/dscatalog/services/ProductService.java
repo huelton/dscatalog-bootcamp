@@ -12,7 +12,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.devsuperior.dscatalog.dto.CategoryDTO;
 import com.devsuperior.dscatalog.dto.ProductDTO;
 import com.devsuperior.dscatalog.entities.Category;
 import com.devsuperior.dscatalog.entities.Product;
@@ -26,7 +25,7 @@ public class ProductService {
 
 	@Autowired
 	private ProductRepository productRepository;
-	
+
 	@Autowired
 	private CategoryRepository categoryRepository;
 
@@ -75,21 +74,20 @@ public class ProductService {
 			throw new DatabaseException("Integrity Violation ");
 		}
 	}
-	
+
 	private void copyDtoToEntity(ProductDTO dto, Product entity) {
 		entity.setName(dto.getName());
 		entity.setDescription(dto.getDescription());
 		entity.setDate(dto.getDate());
 		entity.setImgUrl(dto.getImgUrl());
 		entity.setPrice(dto.getPrice());
-		
+
 		entity.getCategories().clear();
-		
-		for (CategoryDTO catDTO : dto.getCategories()) {
-			Category category = categoryRepository.getOne(catDTO.getId());
-			entity.getCategories().add(category);
-		}
-		
+
+		dto.getCategories().forEach(catDTO -> {
+            Optional<Category> category = categoryRepository.findById(catDTO.getId());
+                entity.getCategories().add(category.orElseThrow(() -> new ResourceNotFoundException("Id Category Not Found: " + catDTO.getId())));
+        });
 	}
 
 }
