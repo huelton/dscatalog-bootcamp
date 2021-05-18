@@ -41,7 +41,9 @@ public class ProductResource {
 		Page<ProductDTO> list = productService.findAllPaged(pageRequest);
 		list.getContent()
 				.forEach( prodDTO -> {
+					//Hateos to each id product
 					prodDTO.add(linkTo(methodOn(ProductResource.class).findById(prodDTO.getId())).withSelfRel());
+					//Hateos to each id category
 					prodDTO.getCategories().forEach( x -> x.add(linkTo(methodOn(CategoryResource.class).findById(x.getId())).withSelfRel()));
 					
 				});
@@ -52,7 +54,9 @@ public class ProductResource {
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<ProductDTO> findById(@PathVariable Long id) {
 		ProductDTO dto = productService.findById(id);
+		//Hateos to each id category
 		dto.getCategories().forEach( x -> x.add(linkTo(methodOn(CategoryResource.class).findById(x.getId())).withSelfRel()));
+		//Hateos to list of products
 		dto.add(linkTo(methodOn(ProductResource.class).findAll(0,10,"ASC","name")).withRel("Product List"));
 		return ResponseEntity.ok().body(dto);
 	}

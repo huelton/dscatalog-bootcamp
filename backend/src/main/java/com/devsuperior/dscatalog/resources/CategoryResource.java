@@ -38,7 +38,7 @@ public class CategoryResource {
 			@RequestParam(value = "orderBy", defaultValue = "name") String orderBy) {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		Page<CategoryDTO> list = categoryService.findAllPaged(pageRequest);
-		
+		//Hateos to each id category
 		list.getContent().forEach( catDTO -> catDTO.add(linkTo(methodOn(CategoryResource.class).findById(catDTO.getId())).withSelfRel()));
 		
 		return ResponseEntity.ok().body(list);
@@ -47,6 +47,7 @@ public class CategoryResource {
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<CategoryDTO> findById(@PathVariable Long id) {
 		CategoryDTO dto = categoryService.findById(id);
+		//Hateos to list of categories
 		dto.add(linkTo(methodOn(CategoryResource.class).findAll(0,10,"ASC","name")).withRel("Category List"));
 		return ResponseEntity.ok().body(dto);
 	}
