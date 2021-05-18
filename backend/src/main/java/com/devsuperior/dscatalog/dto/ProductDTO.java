@@ -6,10 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import com.devsuperior.dscatalog.entities.Category;
 import com.devsuperior.dscatalog.entities.Product;
 
-public class ProductDTO implements Serializable{
+public class ProductDTO extends RepresentationModel<ProductDTO>implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
@@ -45,6 +47,11 @@ public class ProductDTO implements Serializable{
 	}
 	
 	public ProductDTO(Product product, Set<Category> categories) {
+		this(product);
+		categories.forEach(cat -> this.categories.add(new CategoryDTO(cat)));
+	}
+	
+	public ProductDTO(Product product, List<Category> categories) {
 		this(product);
 		categories.forEach(cat -> this.categories.add(new CategoryDTO(cat)));
 	}

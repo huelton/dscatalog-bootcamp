@@ -2,6 +2,9 @@ package com.devsuperior.dscatalog.resources;
 
 import java.net.URI;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,17 +33,21 @@ public class CategoryResource {
 
 	@GetMapping
 	public ResponseEntity<Page<CategoryDTO>> findAll(@RequestParam(value = "page", defaultValue = "0") Integer page,
-			@RequestParam(value = "linesPerPage", defaultValue = "12") Integer linesPerPage,
+			@RequestParam(value = "linesPerPage", defaultValue = "10") Integer linesPerPage,
 			@RequestParam(value = "direction", defaultValue = "ASC") String direction,
 			@RequestParam(value = "orderBy", defaultValue = "name") String orderBy) {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		Page<CategoryDTO> list = categoryService.findAllPaged(pageRequest);
+		
+		list.getContent().forEach( catDTO -> catDTO.add(linkTo(methodOn(CategoryResource.class).findById(catDTO.getId())).withSelfRel()));
+		
 		return ResponseEntity.ok().body(list);
 	}
 
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<CategoryDTO> findById(@PathVariable Long id) {
 		CategoryDTO dto = categoryService.findById(id);
+		dto.add(linkTo(methodOn(CategoryResource.class).findAll(0,10,"ASC","name")).withRel("Category List"));
 		return ResponseEntity.ok().body(dto);
 	}
 

@@ -2,9 +2,11 @@ package com.devsuperior.dscatalog.dto;
 
 import java.io.Serializable;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import com.devsuperior.dscatalog.entities.Category;
 
-public class CategoryDTO implements Serializable{
+public class CategoryDTO extends RepresentationModel<CategoryDTO> implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 

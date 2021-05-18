@@ -1,11 +1,15 @@
 package com.devsuperior.dscatalog.resources;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,17 +34,26 @@ public class ProductResource {
 
 	@GetMapping
 	public ResponseEntity<Page<ProductDTO>> findAll(@RequestParam(value = "page", defaultValue = "0") Integer page,
-			@RequestParam(value = "linesPerPage", defaultValue = "12") Integer linesPerPage,
+			@RequestParam(value = "linesPerPage", defaultValue = "10") Integer linesPerPage,
 			@RequestParam(value = "direction", defaultValue = "ASC") String direction,
 			@RequestParam(value = "orderBy", defaultValue = "name") String orderBy) {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		Page<ProductDTO> list = productService.findAllPaged(pageRequest);
+		list.getContent()
+				.forEach( prodDTO -> {
+					prodDTO.add(linkTo(methodOn(ProductResource.class).findById(prodDTO.getId())).withSelfRel());
+					prodDTO.getCategories().forEach( x -> x.add(linkTo(methodOn(CategoryResource.class).findById(x.getId())).withSelfRel()));
+					
+				});
+
 		return ResponseEntity.ok().body(list);
 	}
 
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<ProductDTO> findById(@PathVariable Long id) {
 		ProductDTO dto = productService.findById(id);
+		dto.getCategories().forEach( x -> x.add(linkTo(methodOn(CategoryResource.class).findById(x.getId())).withSelfRel()));
+		dto.add(linkTo(methodOn(ProductResource.class).findAll(0,10,"ASC","name")).withRel("Product List"));
 		return ResponseEntity.ok().body(dto);
 	}
 
