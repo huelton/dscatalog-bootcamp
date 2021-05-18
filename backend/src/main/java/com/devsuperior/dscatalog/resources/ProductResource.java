@@ -40,11 +40,11 @@ public class ProductResource {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		Page<ProductDTO> list = productService.findAllPaged(pageRequest);
 		list.getContent()
-				.forEach( prodDTO -> {
+				.forEach( prod -> {
 					//Hateos to each id product
-					prodDTO.add(linkTo(methodOn(ProductResource.class).findById(prodDTO.getId())).withSelfRel());
+					prod.add(linkTo(methodOn(ProductResource.class).findById(prod.getId())).withSelfRel());
 					//Hateos to each id category
-					prodDTO.getCategories().forEach( x -> x.add(linkTo(methodOn(CategoryResource.class).findById(x.getId())).withSelfRel()));
+					prod.getCategories().forEach( cat -> cat.add(linkTo(methodOn(CategoryResource.class).findById(cat.getId())).withSelfRel()));
 					
 				});
 
@@ -55,7 +55,7 @@ public class ProductResource {
 	public ResponseEntity<ProductDTO> findById(@PathVariable Long id) {
 		ProductDTO dto = productService.findById(id);
 		//Hateos to each id category
-		dto.getCategories().forEach( x -> x.add(linkTo(methodOn(CategoryResource.class).findById(x.getId())).withSelfRel()));
+		dto.getCategories().forEach( cat -> cat.add(linkTo(methodOn(CategoryResource.class).findById(cat.getId())).withSelfRel()));
 		//Hateos to list of products
 		dto.add(linkTo(methodOn(ProductResource.class).findAll(0,10,"ASC","name")).withRel("Product List"));
 		return ResponseEntity.ok().body(dto);

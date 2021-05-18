@@ -39,8 +39,7 @@ public class CategoryResource {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		Page<CategoryDTO> list = categoryService.findAllPaged(pageRequest);
 		//Hateos to each id category
-		list.getContent().forEach( catDTO -> catDTO.add(linkTo(methodOn(CategoryResource.class).findById(catDTO.getId())).withSelfRel()));
-		
+		list.getContent().forEach( cat -> cat.add(linkTo(methodOn(CategoryResource.class).findById(cat.getId())).withSelfRel()));		
 		return ResponseEntity.ok().body(list);
 	}
 
