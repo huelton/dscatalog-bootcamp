@@ -14,12 +14,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.devsuperior.dscatalog.dto.CategoryDTO;
 import com.devsuperior.dscatalog.dto.ProductDTO;
 import com.devsuperior.dscatalog.entities.Category;
 import com.devsuperior.dscatalog.entities.Product;
 import com.devsuperior.dscatalog.repositories.CategoryRepository;
 import com.devsuperior.dscatalog.repositories.ProductRepository;
+import com.devsuperior.dscatalog.services.exceptions.CategoryException;
 import com.devsuperior.dscatalog.services.exceptions.DatabaseException;
+import com.devsuperior.dscatalog.services.exceptions.ProductException;
 import com.devsuperior.dscatalog.services.exceptions.ResourceNotFoundException;
 
 @Service
@@ -46,11 +49,15 @@ public class ProductService {
 	}
 
 	@Transactional
-	public ProductDTO save(ProductDTO dto) {
-		Product entity = new Product();
-		copyDtoToEntity(dto, entity);
-		productRepository.save(entity);
-		return new ProductDTO(entity);
+	public ProductDTO save(ProductDTO dto) {		
+		try {
+			Product entity = new Product();
+			copyDtoToEntity(dto, entity);
+			productRepository.save(entity);
+			return new ProductDTO(entity);
+		}catch ( DataIntegrityViolationException e) {
+			throw new ProductException("Product : "+ dto.getName()+", already exist in your database");
+		}
 	}
 
 	@Transactional
@@ -78,7 +85,7 @@ public class ProductService {
 	}
 
 	private void copyDtoToEntity(ProductDTO dto, Product entity) {
-		entity.setName(dto.getName());
+		entity.setName(dto.getName().toLowerCase());
 		entity.setDescription(dto.getDescription());
 		entity.setDate(dto.getDate());
 		entity.setImgUrl(dto.getImgUrl());

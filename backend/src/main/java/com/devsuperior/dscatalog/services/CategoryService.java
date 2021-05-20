@@ -1,9 +1,12 @@
 package com.devsuperior.dscatalog.services;
 
+import java.util.Locale;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 
+import com.devsuperior.dscatalog.services.exceptions.CategoryException;
+import com.devsuperior.dscatalog.util.OptionalConsumer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -40,17 +43,21 @@ public class CategoryService {
 
 	@Transactional
 	public CategoryDTO save(CategoryDTO dto) {
-		Category entity = new Category();
-		entity.setName(dto.getName());
-		categoryRepository.save(entity);
-		return new CategoryDTO(entity);
+		try {
+			Category entity = new Category();
+			entity.setName(dto.getName().toLowerCase());
+			categoryRepository.save(entity);
+			return new CategoryDTO(entity);
+		}catch ( DataIntegrityViolationException e) {
+			throw new CategoryException("Category : "+ dto.getName()+", already exist in your database");
+		}
 	}
 
 	@Transactional
 	public CategoryDTO update(Long id, CategoryDTO dto) {
 		try {
 			Category entity = categoryRepository.getOne(id);
-			entity.setName(dto.getName());
+			entity.setName(dto.getName().toLowerCase());
 			entity = categoryRepository.save(entity);
 			return new CategoryDTO(entity);
 
