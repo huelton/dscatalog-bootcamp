@@ -5,6 +5,7 @@ import java.net.URI;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,10 +27,10 @@ import com.devsuperior.dscatalog.services.CategoryService;
 
 @RestController
 @RequestMapping(value = "/categories")
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class CategoryResource {
 
-	@Autowired
-	private CategoryService categoryService;
+	private final CategoryService categoryService;
 
 	@GetMapping
 	public ResponseEntity<Page<CategoryDTO>> findAll(@RequestParam(value = "page", defaultValue = "0") Integer page,

@@ -7,6 +7,7 @@ import javax.persistence.EntityNotFoundException;
 
 import com.devsuperior.dscatalog.services.exceptions.CategoryException;
 import com.devsuperior.dscatalog.util.OptionalConsumer;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -22,10 +23,10 @@ import com.devsuperior.dscatalog.services.exceptions.DatabaseException;
 import com.devsuperior.dscatalog.services.exceptions.ResourceNotFoundException;
 
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class CategoryService {
 
-	@Autowired
-	private CategoryRepository categoryRepository;
+	private final CategoryRepository categoryRepository;
 
 	@Transactional(readOnly = true)
 	public Page<CategoryDTO> findAllPaged(PageRequest pageRequest) {

@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.EntityNotFoundException;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -26,10 +27,10 @@ import com.devsuperior.dscatalog.services.exceptions.ProductException;
 import com.devsuperior.dscatalog.services.exceptions.ResourceNotFoundException;
 
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ProductService {
 
-	@Autowired
-	private ProductRepository productRepository;
+	private final ProductRepository productRepository;
 
 	@Autowired
 	private CategoryRepository categoryRepository;

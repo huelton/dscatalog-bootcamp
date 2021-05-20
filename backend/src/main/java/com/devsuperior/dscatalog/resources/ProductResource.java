@@ -5,6 +5,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.net.URI;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,10 +28,10 @@ import com.devsuperior.dscatalog.services.ProductService;
 
 @RestController
 @RequestMapping(value = "/products")
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ProductResource {
 
-	@Autowired
-	private ProductService productService;
+	private final ProductService productService;
 
 	@GetMapping
 	public ResponseEntity<Page<ProductDTO>> findAll(@RequestParam(value = "page", defaultValue = "0") Integer page,
