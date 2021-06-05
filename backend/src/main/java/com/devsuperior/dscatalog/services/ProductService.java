@@ -1,30 +1,27 @@
 package com.devsuperior.dscatalog.services;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import javax.persistence.EntityNotFoundException;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.devsuperior.dscatalog.dto.CategoryDTO;
 import com.devsuperior.dscatalog.dto.ProductDTO;
 import com.devsuperior.dscatalog.entities.Category;
 import com.devsuperior.dscatalog.entities.Product;
 import com.devsuperior.dscatalog.repositories.CategoryRepository;
 import com.devsuperior.dscatalog.repositories.ProductRepository;
-import com.devsuperior.dscatalog.services.exceptions.CategoryException;
 import com.devsuperior.dscatalog.services.exceptions.DatabaseException;
 import com.devsuperior.dscatalog.services.exceptions.ProductException;
 import com.devsuperior.dscatalog.services.exceptions.ResourceNotFoundException;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -36,8 +33,8 @@ public class ProductService {
 	private CategoryRepository categoryRepository;
 
 	@Transactional(readOnly = true)
-	public Page<ProductDTO> findAllPaged(PageRequest pageRequest) {
-		Page<Product> list = productRepository.findAll(pageRequest);
+	public Page<ProductDTO> findAllPaged(Pageable pageable) {
+		Page<Product> list = productRepository.findAll(pageable);
 		return list.map(x -> new ProductDTO(x, x.getCategories()));
 	}
 
@@ -50,14 +47,14 @@ public class ProductService {
 	}
 
 	@Transactional
-	public ProductDTO save(ProductDTO dto) {		
+	public ProductDTO save(ProductDTO dto) {
 		try {
 			Product entity = new Product();
 			copyDtoToEntity(dto, entity);
 			productRepository.save(entity);
 			return new ProductDTO(entity);
-		}catch ( DataIntegrityViolationException e) {
-			throw new ProductException("Product : "+ dto.getName()+", already exist in your database");
+		} catch (DataIntegrityViolationException e) {
+			throw new ProductException("Product : " + dto.getName() + ", already exist in your database");
 		}
 	}
 

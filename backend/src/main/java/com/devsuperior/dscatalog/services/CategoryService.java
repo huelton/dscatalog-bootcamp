@@ -1,26 +1,26 @@
 package com.devsuperior.dscatalog.services;
 
-import java.util.Locale;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 
-import com.devsuperior.dscatalog.services.exceptions.CategoryException;
-import com.devsuperior.dscatalog.util.OptionalConsumer;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.devsuperior.dscatalog.dto.CategoryDTO;
 import com.devsuperior.dscatalog.entities.Category;
 import com.devsuperior.dscatalog.repositories.CategoryRepository;
+import com.devsuperior.dscatalog.services.exceptions.CategoryException;
 import com.devsuperior.dscatalog.services.exceptions.DatabaseException;
 import com.devsuperior.dscatalog.services.exceptions.ResourceNotFoundException;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -29,8 +29,8 @@ public class CategoryService {
 	private final CategoryRepository categoryRepository;
 
 	@Transactional(readOnly = true)
-	public Page<CategoryDTO> findAllPaged(PageRequest pageRequest) {
-		Page<Category> list = categoryRepository.findAll(pageRequest);
+	public Page<CategoryDTO> findAllPaged(Pageable pageable) {
+		Page<Category> list = categoryRepository.findAll(pageable);
 		return list.map(x -> new CategoryDTO(x));
 	}
 
@@ -49,8 +49,8 @@ public class CategoryService {
 			entity.setName(dto.getName().toLowerCase());
 			categoryRepository.save(entity);
 			return new CategoryDTO(entity);
-		}catch ( DataIntegrityViolationException e) {
-			throw new CategoryException("Category : "+ dto.getName()+", already exist in your database");
+		} catch (DataIntegrityViolationException e) {
+			throw new CategoryException("Category : " + dto.getName() + ", already exist in your database");
 		}
 	}
 
