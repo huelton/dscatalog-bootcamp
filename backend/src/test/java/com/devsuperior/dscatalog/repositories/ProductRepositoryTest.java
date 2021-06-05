@@ -1,5 +1,9 @@
 package com.devsuperior.dscatalog.repositories;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
@@ -34,14 +38,14 @@ public class ProductRepositoryTest {
 	public void getShouldReturnObjectNoEmptyGetByIdWhenIdExist() {
 		Optional<Product> result = productRepository.findById(existingId);	
 		
-		Assertions.assertTrue(result.isPresent());
+		assertTrue(result.isPresent());
 	}
 	
 	@Test
 	public void getShouldReturnObjectEmptyGetByIdWhenIdNotExist() {
 		Optional<Product> result = productRepository.findById(nonExistingId);	
 		
-		Assertions.assertTrue(result.isEmpty());
+		assertTrue(result.isEmpty());
 	}
 	
 	@Test
@@ -51,8 +55,8 @@ public class ProductRepositoryTest {
 		
 		product = productRepository.save(product);
 		
-		Assertions.assertNotNull(product.getId());		
-		Assertions.assertEquals(countTotalProducts + 1, product.getId());
+		assertNotNull(product.getId());		
+		assertEquals(countTotalProducts + 1, product.getId());
 	}
 	
 	@Test
@@ -64,9 +68,9 @@ public class ProductRepositoryTest {
 		
 		product = productRepository.save(product);
 		
-		Assertions.assertNotNull(product.getId());		
-		Assertions.assertEquals(existingId, product.getId());
-		Assertions.assertEquals(changeProductName, product.getName());
+		assertNotNull(product.getId());		
+		assertEquals(existingId, product.getId());
+		assertEquals(changeProductName, product.getName());
 		
 	}
 
