@@ -28,10 +28,10 @@ public class Category implements Serializable{
 	//@Column(unique = true)
 	private String name;
 	
-	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+	//@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
 	private Instant createdAt;
 	
-	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+	//@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
 	private Instant updatedAt;
 	
 	@ManyToMany(mappedBy = "categories")

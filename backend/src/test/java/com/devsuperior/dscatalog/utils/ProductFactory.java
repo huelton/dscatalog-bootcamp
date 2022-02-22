@@ -9,7 +9,7 @@ import com.devsuperior.dscatalog.entities.Product;
 public class ProductFactory {
 
 	public static Product createProduct() {
-		Product product = new Product(1L,"Phone", "Good Phone", 800.0, "https://img.com/img.png", Instant.parse("2021-04-15T03:00:00Z"));
+		Product product = new Product(1L,"IPhone", "Good Phone", 3500.0, "https://img.com/img.png", Instant.parse("2021-04-15T03:00:00Z"));
 		product.getCategories().add(new Category(2L,"Eletronics"));
 		return product;
 	}

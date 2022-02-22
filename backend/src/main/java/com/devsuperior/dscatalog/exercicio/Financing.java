@@ -1,7 +1,11 @@
 package com.devsuperior.dscatalog.exercicio;
 
-public class Financing {
+import java.io.Serializable;
 
+public class Financing implements Serializable{
+
+	private static final long serialVersionUID = 1L;
+	
 	private Double totalAmount;
 	private Double income;
 	private Integer months;
