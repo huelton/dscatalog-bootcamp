@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.context.annotation.Profile;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageImpl;
@@ -29,6 +30,7 @@ import com.devsuperior.dscatalog.services.exceptions.DatabaseException;
 import com.devsuperior.dscatalog.services.exceptions.ResourceNotFoundException;
 import com.devsuperior.dscatalog.utils.ProductFactory;
 
+@Profile("test")
 @ExtendWith(SpringExtension.class)
 public class ProductServiceTest {
 	
@@ -50,7 +52,7 @@ public class ProductServiceTest {
 		nonExistingId = 1000L;
 		dependentId = 4L;
 		product = ProductFactory.createProduct();
-		page = new PageImpl<>(List.of(product));		
+		page = new PageImpl<>(List.of(product));
 		
 		when(productRepository.findAll((Pageable) any())).thenReturn(page);
 		when(productRepository.save(any())).thenReturn(product);

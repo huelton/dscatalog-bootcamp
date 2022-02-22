@@ -51,6 +51,7 @@ public class FinancingTest {
 			Double salarioMensal = 2000.0;
 			Integer totalMesesFinanciamento = 79;
 
+			@SuppressWarnings("unused")
 			Financing financing = new Financing(valorFinanciamento, salarioMensal, totalMesesFinanciamento);
 		});
 	}
