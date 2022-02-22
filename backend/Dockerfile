@@ -6,6 +6,6 @@
 #ENTRYPOINT ["java","-jar","/app.jar"]
 
 FROM openjdk:8
-ADD target/spring-boot-mysql.jar spring-boot-mysql.jar
+ADD target/spring-boot-mysql-master.jar spring-boot-mysql-master.jar
 EXPOSE 8086
-ENTRYPOINT ["java", "-jar", "spring-boot-mysql.jar"]
+ENTRYPOINT ["java", "-jar", "spring-boot-mysql-master.jar"]
